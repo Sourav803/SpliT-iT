@@ -1,12 +1,10 @@
 import React,{ Component, useState } from 'react';
 import { Jumbotron, Card, CardTitle, CardText, CardSubtitle, CardHeader, CardBody, Button, Row, Col, Label } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
-import Calculate from './CalculateComponent';
+//import Calculate from './CalculateComponent';
 
-let names=[];
-
+let money=[],names=[];
 const NewCard=(props)=>{
-
     const [inputList, setInputList] = useState([{ what: "", money: "" }]);
     
     const handleInputChange = (e, index) => {
@@ -27,23 +25,25 @@ const NewCard=(props)=>{
       };
 
       const Submit=(values)=>{
+          
           names.push(values.name);
           var amt=0;
-          {names.map((i)=>{
-            alert("Name="+names);
-          })}
           {inputList.map((x,i)=>{
             amt=amt+parseInt(x.money);
           })}
-          alert("Amount="+JSON.stringify(amt/props.count));
+          amt=amt/props.count;
+          money.push(amt);
+          alert("Names :"+ JSON.stringify(names));
+          alert("Money :"+ JSON.stringify(money));
         //console.log("Current State is: "+JSON.stringify(values));
         //alert("Current State is: "+JSON.stringify(values));
         alert("Current State is: "+JSON.stringify(inputList));
-        return(
-            <div>
-            akash
-            </div>
-        );
+        alert("Money to be paid by each person :"+JSON.stringify(money));
+        /*return(
+            <>
+            <Calculate mon={money} />
+            </>
+        );*/
         //alert("name="+JSON.stringify(values.name));
         //<Calculate inputList={inputList} name={values.name} />
       };
@@ -53,6 +53,7 @@ const NewCard=(props)=>{
             <Card className="mt-1 NewCard">
                         <CardBody>
                         <LocalForm onSubmit={(values) =>Submit(values)}>
+                           
                                     <Row className="form-group">
                                     <Label htmlFor="name"><i className="fa fa-users fa-lg"></i></Label>
                                         <Col xs={8}>
@@ -88,12 +89,14 @@ const NewCard=(props)=>{
                                     </>
                                 );
                             })}
+                    
                             <Button type="submit" color="success" className="dash-button">
                                 Calculate!
                 </Button>
                             </LocalForm>
                         </CardBody>
                     </Card>
+
             </>
     );
 }
@@ -146,12 +149,17 @@ class Dashboard extends Component{
             let rows=[];
             for(let i=1;i<=this.state.count;i++)
             rows.push(<NewCard count={this.state.count} key={i}/>)
+            
                 return(
+                    <>
                     <div className="col-12">
                 {rows}
-                
                 </div>
-            );   
+                
+                </>
+            ); 
+            
+           
         }
     }
 
