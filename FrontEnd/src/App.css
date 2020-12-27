@@ -72,3 +72,14 @@ address{
   height: 150%;
 }
 
+.result{
+  width: 80%;
+}
+
+.transfer-button{
+  background-color: #41b641;
+}
+
+.tick{
+  color: #0f8d0b;
+}

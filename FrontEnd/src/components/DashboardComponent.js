@@ -1,12 +1,12 @@
 import React,{ Component, useState } from 'react';
-import { Jumbotron, Card, CardTitle, CardText, CardSubtitle, CardHeader, CardBody, Button, Row, Col, Label } from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form';
-//import Calculate from './CalculateComponent';
+import { Jumbotron, Card, CardHeader, CardBody, Button, Row, Col, Label } from 'reactstrap';
+import { Control, LocalForm, Errors, isValid } from 'react-redux-form';
+import Calculate from './CalculateComponent';
 
 let money=[],names=[];
 const NewCard=(props)=>{
     const [inputList, setInputList] = useState([{ what: "", money: "" }]);
-    
+
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputList];
@@ -15,6 +15,11 @@ const NewCard=(props)=>{
       };
 
       const handleAddClick = () => {
+          if(inputList[inputList.length-1].money=="")
+          {
+              alert("Above Field can't be Empty!!");
+              return;
+          }
         setInputList([...inputList, { what: "", money: "" }]);
       };
 
@@ -22,30 +27,37 @@ const NewCard=(props)=>{
         const list = [...inputList];
         list.splice(index, 1);
         setInputList(list);
+        money.splice(index,1);
+        names.splice(index,1);
       };
 
       const Submit=(values)=>{
-          
-          names.push(values.name);
+          if(inputList[inputList.length-1].money=="")
+          {
+              alert("Invalid Input!");
+              return;
+          }
+          let flag=1,idx=-1;
+          for(let i=0;i<names.length;i++)
+          {
+                if(names[i]==values.name)
+                {
+                    flag=0;
+                    idx=i;
+                    break;
+                }
+          }
           var amt=0;
-          {inputList.map((x,i)=>{
+          inputList.map((x,i)=>{
             amt=amt+parseInt(x.money);
-          })}
-          amt=amt/props.count;
-          money.push(amt);
-          alert("Names :"+ JSON.stringify(names));
-          alert("Money :"+ JSON.stringify(money));
-        //console.log("Current State is: "+JSON.stringify(values));
-        //alert("Current State is: "+JSON.stringify(values));
-        alert("Current State is: "+JSON.stringify(inputList));
-        alert("Money to be paid by each person :"+JSON.stringify(money));
-        /*return(
-            <>
-            <Calculate mon={money} />
-            </>
-        );*/
-        //alert("name="+JSON.stringify(values.name));
-        //<Calculate inputList={inputList} name={values.name} />
+          })
+          if(flag)
+          {
+            names.push(values.name);
+            money.push(amt);
+          }
+          else
+          money[idx]=amt;
       };
 
     return(
@@ -59,6 +71,8 @@ const NewCard=(props)=>{
                                         <Col xs={8}>
                                         <Control.text model=".name" id="name" placeholder="Name" className="form-control"></Control.text>
                                         </Col>
+                                        {inputList[inputList.length-1].money!=""&&
+                                        <i className="fa fa-check-circle fa-lg tick" aria-hidden="true"/>}
                                     </Row>
                         {inputList.map((x, i) => {
                                 return (
@@ -89,10 +103,9 @@ const NewCard=(props)=>{
                                     </>
                                 );
                             })}
-                    
-                            <Button type="submit" color="success" className="dash-button">
-                                Calculate!
-                </Button>
+                                <Button type="submit" color="success" className="dash-button" >
+                                Done!
+                                </Button>
                             </LocalForm>
                         </CardBody>
                     </Card>
@@ -100,6 +113,7 @@ const NewCard=(props)=>{
             </>
     );
 }
+
 
 const required= (val)=>val&&val.length;
 
@@ -109,7 +123,8 @@ class Dashboard extends Component{
 
         this.state={
             count: 3,
-            isNew: false
+            isNew: false,
+            isCalc: false
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -118,8 +133,6 @@ class Dashboard extends Component{
     }
 
     handleSubmit(values){
-        console.log("Current State is: "+JSON.stringify(values));
-        //alert("Current State is: "+JSON.stringify(values));
         if(!this.state.isNew){
             this.setState({
                 isNew: !this.state.isNew
@@ -149,15 +162,26 @@ class Dashboard extends Component{
             let rows=[];
             for(let i=1;i<=this.state.count;i++)
             rows.push(<NewCard count={this.state.count} key={i}/>)
-            
+            if(this.state.isCalc==false)
+            {
+                return(
+                <>
+                <div className="col-12">
+                {rows}
+                <Button type="submit" color="success" className="dash-button" onClick={()=>this.setState({isCalc: !this.state.isCalc})}>
+                    Calculate!
+                </Button>
+                </div>  
+                </>
+                ); 
+            }
+            else{
                 return(
                     <>
-                    <div className="col-12">
-                {rows}
-                </div>
-                
-                </>
-            ); 
+                    <Calculate names={names} money={money} count={this.state.count}/>
+                    </>
+                );
+            }  
             
            
         }
@@ -238,8 +262,7 @@ class Dashboard extends Component{
                     </Card>
                     </div>
                     <div className="col-md-5 ml-md-1 d-flex justify-content-center">
-                        {this.RenderNew()}
-                        
+                        {this.RenderNew()}    
                     </div>
                 </div>
             </div>
