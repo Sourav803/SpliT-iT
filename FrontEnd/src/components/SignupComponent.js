@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Row, Col, Button, Label, Jumbotron } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import firebase from 'firebase';
+import auth from '../firebase';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -16,9 +18,19 @@ class Signup extends Component{
     }
 
     handleSubmit(values){
-        console.log("Current State is: "+JSON.stringify(values));
-        alert("Current State is: "+JSON.stringify(values));
-        
+        const email=values.username;
+        const password=values.password;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ..
+        });
     }
 
     render(){
@@ -75,19 +87,19 @@ class Signup extends Component{
                                 
                             </Row>
                             <Row className="form-group">
-                                <Label htmlFor="username">User Name</Label>
+                                <Label htmlFor="email">Email</Label>
                                 
-                                    <Control.text model=".username" id="username" name="username"
-                                        placeholder="User Name"
+                                    <Control.text model=".email" id="email" name="email"
+                                        placeholder="Email"
                                         className="form-control"
                                         validators={{
-                                            required,minLength:minLength(3)
+                                            required,validEmail
                                         }}
                                          />
-                                         <Errors className="text-danger" model=".username" show="touched"
+                                         <Errors className="text-danger" model=".email" show="touched"
                                          messages={{
                                              required: 'Required |',
-                                             minLength: ' Must be greater than 2 numbers!'
+                                             validEmail: ' Not a valid Email-id!'
                                          }}
                                          />
                                 
@@ -99,7 +111,7 @@ class Signup extends Component{
                                         placeholder="Password"
                                         className="form-control"
                                         validators={{
-                                            required, minLength:minLength(8)
+                                            required, minLength:minLength(6)
                                         }} />
                                         <Errors className="text-danger" model=".password" show="touched"
                                          messages={{

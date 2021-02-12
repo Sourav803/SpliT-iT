@@ -1,6 +1,6 @@
 import React,{ Component, useState } from 'react';
 import { Jumbotron, Card, CardHeader, CardBody, Button, Row, Col, Label } from 'reactstrap';
-import { Control, LocalForm, Errors, isValid } from 'react-redux-form';
+import { Control, LocalForm, Errors} from 'react-redux-form';
 import Calculate from './CalculateComponent';
 
 let money=[],names=[];
@@ -15,7 +15,7 @@ const NewCard=(props)=>{
       };
 
       const handleAddClick = () => {
-          if(inputList[inputList.length-1].money=="")
+          if(inputList[inputList.length-1].money==="")
           {
               alert("Above Field can't be Empty!!");
               return;
@@ -32,7 +32,7 @@ const NewCard=(props)=>{
       };
 
       const Submit=(values)=>{
-          if(inputList[inputList.length-1].money=="")
+          if(inputList[inputList.length-1].money==="")
           {
               alert("Invalid Input!");
               return;
@@ -40,7 +40,7 @@ const NewCard=(props)=>{
           let flag=1,idx=-1;
           for(let i=0;i<names.length;i++)
           {
-                if(names[i]==values.name)
+                if(names[i]===values.name)
                 {
                     flag=0;
                     idx=i;
@@ -71,7 +71,7 @@ const NewCard=(props)=>{
                                         <Col xs={8}>
                                         <Control.text model=".name" id="name" placeholder="Name" className="form-control"></Control.text>
                                         </Col>
-                                        {inputList[inputList.length-1].money!=""&&
+                                        {inputList[inputList.length-1].money!==""&&
                                         <i className="fa fa-check-circle fa-lg tick" aria-hidden="true"/>}
                                     </Row>
                         {inputList.map((x, i) => {
@@ -109,11 +109,9 @@ const NewCard=(props)=>{
                             </LocalForm>
                         </CardBody>
                     </Card>
-
             </>
     );
 }
-
 
 const required= (val)=>val&&val.length;
 
@@ -137,6 +135,14 @@ class Dashboard extends Component{
             this.setState({
                 isNew: !this.state.isNew
             });
+        }
+        else if(this.state.isNew&&this.state.isCalc)
+        {
+            this.setState({
+                isCalc: !this.state.isCalc
+            });
+            names.splice(0,names.length);
+            money.splice(0,money.length);
         }
         
     }
@@ -162,13 +168,18 @@ class Dashboard extends Component{
             let rows=[];
             for(let i=1;i<=this.state.count;i++)
             rows.push(<NewCard count={this.state.count} key={i}/>)
-            if(this.state.isCalc==false)
+            if(this.state.isCalc===false)
             {
                 return(
                 <>
                 <div className="col-12">
                 {rows}
-                <Button type="submit" color="success" className="dash-button" onClick={()=>this.setState({isCalc: !this.state.isCalc})}>
+                <Button type="submit" color="success" className="dash-button" onClick={()=>{
+                    if(names.length===0||money.length===0)
+                    alert("Fields can't be Empty!");
+                    else
+                    this.setState({isCalc: !this.state.isCalc});
+                    }}>
                     Calculate!
                 </Button>
                 </div>  
@@ -176,11 +187,13 @@ class Dashboard extends Component{
                 ); 
             }
             else{
-                return(
-                    <>
-                    <Calculate names={names} money={money} count={this.state.count}/>
-                    </>
-                );
+                
+                    return(
+                        <>
+                        <Calculate names={names} money={money} count={this.state.count} isCalc={this.state.isCalc}/>
+                        </>
+                    );
+                
             }  
             
            
@@ -211,26 +224,24 @@ class Dashboard extends Component{
                         <CardBody>
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                         <Row className="form-group d-flex justify-content-center">
-                            
-                                <Label htmlFor="count">How many people are in your group?</Label>
-                               </Row>
-                                <Row className="form-group d-flex justify-content-center">
-                                    <Col>
-                                    <i className="fa fa-minus-square fa-2x" onClick={()=>this.decrement()}></i>
-                                    </Col>
-                                    <Col xs={8}>
-                                    <Control.input model=".count" id="count" name="count"
-                                        value={this.state.count}
-                                        defaultValue={this.state.count}
-                                        className="form-control"
-                                        style={{textAlign:"center"}}
-                                         />
-                                         </Col>
-                                         <Col>
-                                         <i className="fa fa-plus-square fa-2x" onClick={()=>this.increment()}></i>
-                                         </Col>
-                                         
-                            </Row>
+                            <Label htmlFor="count">How many people are in your group?</Label>
+                        </Row>
+                        <Row className="form-group d-flex justify-content-center">
+                            <Col>
+                            <i className="fa fa-minus-square fa-2x" onClick={()=>this.decrement()}></i>
+                            </Col>
+                            <Col xs={8}>
+                                <Control.input model=".count" id="count" name="count"
+                                value={this.state.count}
+                                defaultValue={this.state.count}
+                                className="form-control"
+                                style={{textAlign:"center"}}
+                                />
+                            </Col>
+                            <Col>
+                                <i className="fa fa-plus-square fa-2x" onClick={()=>this.increment()}></i>
+                            </Col>
+                        </Row>
                             <Row className="form-group d-flex justify-content-center">
                                <Label htmlFor="title">Give it a Name!</Label>
                                </Row>
@@ -256,8 +267,7 @@ class Dashboard extends Component{
                                 </Col>
                             </Row>
                             
-                        </LocalForm>
-                            
+                        </LocalForm>         
                         </CardBody>
                     </Card>
                     </div>

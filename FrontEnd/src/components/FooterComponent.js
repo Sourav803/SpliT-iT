@@ -22,18 +22,18 @@ function Footer(props) {
 		              India<br />
 		              <i className="fa fa-phone fa-lg"></i>: +91 1234 5678<br />
 		              
-		              <i className="fa fa-envelope fa-lg"></i>: <a href="mailto:confusion@food.net">
+		              <i className="fa fa-envelope fa-lg"></i>: <a href="mailto:anandakash375@gmail.com">
                          anandakash375@gmail.com</a>
                     </address>
                 </div>
                 <div className="col-12 col-sm-4 align-self-center">
                     <div className="text-center">
                         <a className="btn btn-social-icon btn-google" href="http://google.com/+"><i className="fa fa-google-plus"></i></a>
-                        <a className="btn btn-social-icon btn-facebook" href="http://www.facebook.com/profile.php?id="><i className="fa fa-facebook"></i></a>
-                        <a className="btn btn-social-icon btn-linkedin" href="http://www.linkedin.com/in/"><i className="fa fa-linkedin"></i></a>
+                        <a className="btn btn-social-icon btn-facebook" href="https://www.facebook.com/profile.php?id=100009061662539"><i className="fa fa-facebook"></i></a>
+                        <a className="btn btn-social-icon btn-linkedin" href="https://www.linkedin.com/in/akash-anand-690675193/"><i className="fa fa-linkedin"></i></a>
                         <a className="btn btn-social-icon btn-twitter" href="http://twitter.com/"><i className="fa fa-twitter"></i></a>
                         <a className="btn btn-social-icon btn-google" href="http://youtube.com/"><i className="fa fa-youtube"></i></a>
-                        <a className="btn btn-social-icon" href="mailto:"><i className="fa fa-envelope-o"></i></a>
+                        <a className="btn btn-social-icon" href="mailto:anandakash375@gmail.com"><i className="fa fa-envelope-o"></i></a>
                     </div>
                 </div>
             </div>

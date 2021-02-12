@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import{ Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label } from 'reactstrap';
 import {NavLink} from 'react-router-dom';
+import firebase from 'firebase';
+import auth from '../firebase';
+import Dashboard from './DashboardComponent';
+import {Redirect} from 'react-router-dom';
+
 
 class Header extends Component {
   constructor(props){
@@ -8,7 +13,9 @@ class Header extends Component {
 
     this.state={
       isNavOpen: false,
-      istoggleNav: false
+      istoggleNav: false,
+      isLogin: false,
+      curUser:''
     };
     this.toggleNav=this.toggleNav.bind(this);
     this.toggleModal=this.toggleModal.bind(this);
@@ -31,12 +38,35 @@ class Header extends Component {
 
 handleLogin(event){
   this.toggleModal();
-  this.props.loginUser({username: this.username.value, password: this.password.value});
   event.preventDefault();
+  const email=this.email.value;
+  const password=this.password.value;
+  //alert(email+' '+password);
+  firebase.auth().signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    this.setState({isLogin: true, curUser: user.email});
+    // ...
+    return(<Redirect to="/dashboard" /> );
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
 }
 
 handleLogout() {
-  this.props.logoutUser();
+  this.setState({isLogin: false},()=>{
+    firebase.auth().signOut()
+    .then((res)=>{
+      alert("Logged Out!");
+    })
+    .catch((error)=>{
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    })
+  });
 }
 
   render() {
@@ -45,7 +75,7 @@ handleLogout() {
       <Navbar dark expand="md">
         <div className="container">
           <NavbarToggler onClick={this.toggleNav} />
-          <NavbarBrand className="mr-auto" href="/">Split-iT</NavbarBrand>
+          <NavbarBrand className="mr-auto" href="/home">Split-iT</NavbarBrand>
           <Collapse isOpen={this.state.isNavOpen} navbar>
             <Nav navbar>
                 <NavItem>
@@ -67,7 +97,7 @@ handleLogout() {
             </Nav>
             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    { !this.props.auth.isAuthenticated ?
+                                    { !this.state.isLogin ?
                                         <Button onClick={this.toggleModal}>
                                             <span className="fa fa-sign-in fa-lg"></span> Login
                                             {this.props.auth.isFetching ?
@@ -77,7 +107,7 @@ handleLogout() {
                                         </Button>
                                         :
                                         <div>
-                                        <div className="navbar-text mr-3">{this.props.auth.user.username}</div>
+                                        <div className="navbar-text mr-3" style={{color: '#ffffff'}}><strong>Welcome!</strong> {this.state.curUser}</div>
                                         <Button onClick={this.handleLogout}>
                                             <span className="fa fa-sign-out fa-lg"></span> Logout
                                             {this.props.auth.isFetching ?
@@ -98,9 +128,9 @@ handleLogout() {
                     <ModalBody>
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                    innerRef={(input) => this.username = input} />
+                                <Label htmlFor="email">Email</Label>
+                                <Input type="text" id="email" name="email"
+                                    innerRef={(input) => this.email = input} />
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="password">Password</Label>

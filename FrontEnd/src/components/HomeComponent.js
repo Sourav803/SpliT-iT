@@ -39,10 +39,10 @@ class Home extends Component{
                </div>
                <div className="col-md-4  ml-5 ml-md-auto d-md-flex justify-content-end mt-1">
                <ul className="list-unstyled home-list">
-                    <li><i className="fa fa-check fa-lg"></i> Add groups and friends</li>
-                    <li><i className="fa fa-check fa-lg"></i> Split expenses, record debts</li>
-                    <li><i className="fa fa-check fa-lg"></i> Equal or unequal splits</li>
-                    <li><i className="fa fa-check fa-lg"></i> Calculate total balances</li>
+                    <li><i className="fa fa-check fa-lg"></i> Free of Cost!</li>
+                    <li><i className="fa fa-check fa-lg"></i> Add upto 10 members</li>
+                    <li><i className="fa fa-check fa-lg"></i> Hassle free Experience</li>
+                    <li><i className="fa fa-check fa-lg"></i> Easy to use</li>
                     <li><i className="fa fa-check fa-lg"></i> Suggested repayments</li>
                     <li><i className="fa fa-check fa-lg"></i> Simplify debts</li>
                 </ul>
