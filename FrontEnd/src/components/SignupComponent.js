@@ -3,6 +3,7 @@ import { Row, Col, Button, Label, Jumbotron } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import firebase from 'firebase';
 import auth from '../firebase';
+import { Redirect, Switch } from 'react-router-dom';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -15,22 +16,30 @@ class Signup extends Component{
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.refreshPage=this.refreshPage.bind(this);
     }
 
     handleSubmit(values){
-        const email=values.username;
+        const email=values.email;
         const password=values.password;
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in 
             var user = userCredential.user;
+            alert("Registeration Succesful!");
+            this.refreshPage();
             // ...
         })
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
+            alert(error.message);
             // ..
         });
+    }
+
+    refreshPage(){
+        window.location.href="/home";
     }
 
     render(){

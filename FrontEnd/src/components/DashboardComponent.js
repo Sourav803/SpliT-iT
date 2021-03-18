@@ -2,6 +2,8 @@ import React,{ Component, useState } from 'react';
 import { Jumbotron, Card, CardHeader, CardBody, Button, Row, Col, Label } from 'reactstrap';
 import { Control, LocalForm, Errors} from 'react-redux-form';
 import Calculate from './CalculateComponent';
+import firebase from 'firebase';
+import auth from '../firebase';
 
 let money=[],names=[];
 const NewCard=(props)=>{
@@ -211,7 +213,7 @@ class Dashboard extends Component{
                     </div>
                     <div className="col-auto">
                     Name: user<br/>
-                    Username: user
+                    Username: {this.state.curUser}
                     </div>
                 </div>
             </div>
