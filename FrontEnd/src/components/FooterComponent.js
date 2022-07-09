@@ -17,13 +17,13 @@ function Footer(props) {
                 <div className="col-7 col-sm-5">
                     <h5>Developer</h5>
                     <address>
-		              Akash Anand<br />
-		              IIT(ISM), Dhanbad<br />
+		              Sourav Sinha<br />
+		              BIT Mesra, Ranchi<br />
 		              India<br />
 		              <i className="fa fa-phone fa-lg"></i>: +91 1234 5678<br />
 		              
-		              <i className="fa fa-envelope fa-lg"></i>: <a href="mailto:anandakash375@gmail.com">
-                         anandakash375@gmail.com</a>
+		              <i className="fa fa-envelope fa-lg"></i>: <a href="mailto:souravhzb3@gmail.com">
+                         souravhzb3@gmail.com</a>
                     </address>
                 </div>
                 <div className="col-12 col-sm-4 align-self-center">
